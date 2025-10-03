@@ -1,0 +1,54 @@
+services:
+  mongo:
+    image: mongo:7
+    ports:
+      - "27017:27017"
+    networks:
+      - mern-app
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.runCommand({ ping: 1 })"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    
+
+  api:
+    build: ./backend
+    container_name: api
+    depends_on:
+      mongo:
+        condition: service_healthy
+    environment:
+      - PORT=4000
+      - MONGO_URI=mongodb://mongo:27017/db
+    ports:
+      - "4000:4000"
+    networks:
+      - mern-app
+
+  web:
+    build:
+      context: ./frontend
+    container_name: web
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "3000:80"
+    networks:
+      - mern-app
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost/"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+networks:
+  mern-app:
+    driver: bridge
+volumes:
+  mongo_data:
+    driver: local
