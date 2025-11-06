@@ -1,0 +1,3 @@
+config:
+  gcp:project: plasma-climber-477114-v4
+  infra:zone: us-central1-a

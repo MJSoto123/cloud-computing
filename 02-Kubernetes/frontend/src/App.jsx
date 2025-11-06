@@ -19,8 +19,8 @@ export default function App() {
     setError("");
     setLoading(true);
     try {
-      console.log("get", "http://localhost:3000/api/items");
-      const res = await fetch(`http://localhost:3000/api/items`, { headers: { Accept: "application/json" } });
+      console.log("get", `${API_BASE}/api/items`);
+      const res = await fetch(`${API_BASE}/api/items`, { headers: { Accept: "application/json" } });
       if (!res.ok) throw new Error(`GET /items → ${res.status}`);
       const data = await res.json();
       setItems(Array.isArray(data) ? data : []);
@@ -42,7 +42,7 @@ export default function App() {
         costo: safeNumber(form.costo),
         cantidad: safeNumber(form.cantidad),
       };
-      const res = await fetch(`http://localhost:3000/api/items`, {
+      const res = await fetch(`${API_BASE}/api/items`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify(payload),
@@ -59,7 +59,7 @@ export default function App() {
   const deleteItem = async (id) => {
     setError("");
     try {
-      const res = await fetch(`http://localhost:3000/api/items/${id}`, { method: "DELETE" });
+      const res = await fetch(`${API_BASE}/api/items/${id}`, { method: "DELETE" });
       if (!res.ok) throw new Error(`DELETE /items/:id → ${res.status}`);
       await fetchItems();
     } catch {
