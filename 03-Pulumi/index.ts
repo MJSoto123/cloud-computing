@@ -8,7 +8,6 @@ const region = gcp.config.region || "us-central1";
 const zone = config.get("zone") || "us-central1-a";
 const clusterName = "mern-cluster";
 
-// Casi me gasto 500 dolares por error jeje
 const useSpotNodes = false;
 const nodeMachineType = "e2-medium";
 const nodeDiskType = "pd-standard";
